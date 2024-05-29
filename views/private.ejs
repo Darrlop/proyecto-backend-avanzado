@@ -1,0 +1,55 @@
+<%- include('header.ejs') %>
+
+  <!-- Masthead-->
+<header class="masthead bg-primary text-white text-center">
+  <div class="container d-flex align-items-center flex-column">
+      <!-- Masthead Avatar Image-->
+      <!-- <img class="masthead-avatar mb-5" src="assets/img/avataaars.svg" alt="..." /> -->
+      <!-- <img class="masthead-avatar mb-5" src="assets/img/chollopop-transparente.png" alt="..." /> -->
+      <p>Área Privada</p>
+      <div class="divider-custom divider-light">
+        <div class="divider-custom-line"></div>
+        <div class="divider-custom-icon"><i class="fas fa-star"></i></div>
+        <div class="divider-custom-line"></div>
+      </div>      
+      <!-- Masthead Heading-->
+      <!-- <h1 class="masthead-heading text-uppercase mb-3"> <%= __('Compra venta molona') %></h1> -->
+      <!-- Icon Divider-->
+      
+      <!-- Masthead Subheading-->
+      <!-- <p class="masthead-subheading font-weight-light mb-0">Graphic Artist - Web Designer - Illustrator</p> -->
+
+      <div class="frame">
+
+        <% anuncios.forEach( (anuncio) => { %>
+          <div class="frame__detail">
+
+            <p><b>Artículo: <%= anuncio.nombre.toUpperCase() %></b></p>
+            <hr>
+            <p>
+              <% var tipo %>
+              <% (anuncio.venta) ? tipo = "Se vende" : tipo = "Se Compra" %>
+              <%= tipo %>
+            </p>
+            <p>Precio: <%= anuncio.precio %> €</p>
+            <p>Tags: <%= anuncio.tags %></p>
+            <!--
+              <>Foto: <%= anuncio.foto %></p>
+            -->
+            <% var nombreFoto %>
+            <% (anuncio.foto !== "") ? nombreFoto = anuncio.foto : nombreFoto = "----"%>
+             <p>Foto: <%= nombreFoto %>
+      
+          </div>
+        <% }) %>
+    
+      </div>
+
+
+  </div>
+</header>
+
+
+
+<%- include('footer.ejs') %>
+
