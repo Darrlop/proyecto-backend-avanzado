@@ -9,7 +9,7 @@ const validator = require("../../lib/validations"); //modularizadas las validaci
 // GET /api/anuncios?
 // Devuelve un json con lista de anuncio según filtros
 router.get("/", validator.validaQuery, async (req, res, next) => {
-  console.log("punto /private");
+  console.log("punto /private");  
   try {
     validationResult(req).throw(); // genero excepción en caso de error en la validación
 
@@ -39,6 +39,7 @@ router.get("/", validator.validaQuery, async (req, res, next) => {
       }
     }
 
+    const userId = req.apiUserId;
     let precioMin = undefined,
       precioMax = undefined;
     const filterByTag = req.query.tag;
@@ -53,6 +54,7 @@ router.get("/", validator.validaQuery, async (req, res, next) => {
 
     desglosandoPrecio();
 
+    if (userId) filter.owner = userId;
     if (filterByTag) filter.tags = filterByTag;
     if (filterByVenta) filter.venta = filterByVenta;
     if (filterByNombre)
@@ -72,7 +74,7 @@ router.get("/", validator.validaQuery, async (req, res, next) => {
         fields
       );
       // res.render("index", { marca: "Nodepop" });
-      res.render("private");
+      res.render("articulos");
     }
   } catch (error) {
     console.log("Error en la petición de /api/anuncios:", error);

@@ -1,5 +1,10 @@
 #!/usr/bin/env node
 
+//Para usar las variables de entorno de .env
+// npm install dotenv
+
+require('dotenv').config()
+
 /**
  * Module dependencies.
  */

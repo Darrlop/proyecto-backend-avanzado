@@ -3,11 +3,15 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+ 
+const session = require('express-session');
+const jwtAuth = require('./lib/jwtAuthMiddleware');
 const i18n = require('./lib/i18nConfigure');
 const LangController = require('./controllers/LangController');
-
+const LoginController = require('./controllers/LoginController');
 
 const langController = new LangController();
+const loginController = new LoginController();
 
 require('./lib/connectMongoose');
 
@@ -23,7 +27,7 @@ app.set('view engine', 'ejs');
 /**
  * MIDDLEWARES
  */
-app.locals.title = 'NodeApp';
+app.locals.title = 'Chollopop';
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -35,7 +39,8 @@ app.use(express.static(path.join(__dirname, 'public')));
  * RUTAS DE LA API
  */
 
-app.use('/api/anuncios', require('./routes/api/anuncios'));
+app.post('/api/authenticate', loginController.postAPIJWT);
+app.use('/api/anuncios', jwtAuth, require('./routes/api/anuncios'));
 app.use('/api/anuncios/tags', require('./routes/api/anuncios'));
 
 /**
@@ -47,8 +52,9 @@ app.use('/api/anuncios/tags', require('./routes/api/anuncios'));
 app.use(i18n.init);
 // app.use('/', require('./routes/api/anuncios'));
 app.use('/', require('./routes/index'));
-app.use('/private', require('./routes/api/anuncios'));
+app.use('/articulos', require('./routes/api/anuncios'));
 app.use('/users', require('./routes/users'));
+
 
 //Uso estilo de controladores para las rutas
 app.get('/change-locale/:locale', langController.changeLocale);  //indico ruta y la relaciono con la clase instanciada y el método
