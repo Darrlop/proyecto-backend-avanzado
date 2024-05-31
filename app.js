@@ -49,12 +49,11 @@ app.use('/api/anuncios/tags', require('./routes/api/anuncios'));
 
 // app.use('/', indexRouter);
 // app.use('/users', usersRouter);
+
 app.use(i18n.init);
-// app.use('/', require('./routes/api/anuncios'));
 app.use('/', require('./routes/index'));
 app.use('/articulos', require('./routes/api/anuncios'));
-app.use('/users', require('./routes/users'));
-
+// app.use('/users', require('./routes/users'));
 
 //Uso estilo de controladores para las rutas
 app.get('/change-locale/:locale', langController.changeLocale);  //indico ruta y la relaciono con la clase instanciada y el método
@@ -79,7 +78,7 @@ app.use(function(err, req, res, next) {
   // Establezco cod. error por defecto
   res.status(err.status || 500);
 
-  // Ss es fallo en API -> respondo en formato Json
+  // Si es fallo en API -> respondo en formato Json
   if (req.originalUrl.startsWith('/api/')) {
     res.json({ error: err.message, descripcion: err.submessage });
     return;

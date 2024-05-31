@@ -5,5 +5,9 @@
 	"Salir": "Logout",
 	"Anuncios": "Items",
 	"Articulos": "Items",
-	"Usuario/contraseña incorrecto": "User/password invalid"
+	"Usuario/contraseña incorrecto": "User/password invalid",
+	"Token no suministrado": "no token provided",
+	"invalid token": "invalid token",
+	"Listado de Artículos": "General List of Articles",
+	"Inicio": "Home"
 }

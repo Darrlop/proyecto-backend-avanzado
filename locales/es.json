@@ -5,5 +5,9 @@
 	"Salir": "Salir",
 	"Anuncios": "Artículos",
 	"Articulos": "Articulos",
-	"Usuario/contraseña incorrecto": "Usuario/contraseña incorrecto"
+	"Usuario/contraseña incorrecto": "Usuario/contraseña incorrecto",
+	"Token no suministrado": "Token no suministrado",
+	"invalid token": "token inválido",
+	"Listado de Artículos": "Listado General de Artículos",
+	"Inicio": "Inicio"
 }

@@ -5,6 +5,7 @@ var router = express.Router();
 const Anuncio = require("../../models/Anuncio");
 const { query, validationResult } = require("express-validator");
 const validator = require("../../lib/validations"); //modularizadas las validaciones
+const upload = require("../../lib/publicUploadConfigure"); //librería para subidad foto form-data
 
 // GET /api/anuncios?
 // Devuelve un json con lista de anuncio según filtros
@@ -110,11 +111,15 @@ router.get("/:id", async (req, res, next) => {
 
 // POST /api/anuncios (body)
 // Crea un anuncio
-router.post("/", validator.validaBody, async (req, res, next) => {
+// router.post("/", validator.validaBody, upload.single('foto'), async (req, res, next) => {
+//router.post("/", upload.single('foto'), async (req, res, next) => {  
+router.post("/", upload.single('foto'), validator.validaBody, async (req, res, next) => {  
   try {
     validationResult(req).throw(); // genero excepción en caso de error en la validación
 
     const datos = req.body;
+    datos.foto = req.file.filename;
+    console.log(datos)
     const anuncio = new Anuncio(datos);
     const anuncioInsertado = await anuncio.save();
     res.json({ result: anuncioInsertado });

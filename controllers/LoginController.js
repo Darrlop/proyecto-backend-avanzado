@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const Usuario = require('../models/Usuario'); 
 const app = require('../app');
+const transl = require('i18n');
 
 class LoginController {
 
@@ -10,15 +11,14 @@ class LoginController {
       let {email, password} = req.headers;
       //console.log (email);
       const usuario = await Usuario.findOne({ email: email});
-
+      
       if (!usuario) {
-        //res.json({ error: res.__('Usuario/contraseña incorrecto')});;
-        res.json({ error: 'Usuario/contraseña incorrecto'});
+        //const error = req.__('Usuario/contraseña incorrecto')       
+        res.json({ error: transl.__('Usuario/contraseña incorrecto')});
         return;
       }
 
-      const tokenJWT = await jwt.sign({userId: usuario._id},process.env.JWT_SECRET, { expiresIn: '1h'} );
-      
+      const tokenJWT = await jwt.sign({userId: usuario._id},process.env.JWT_SECRET, { expiresIn: '1h'} ); 
       //res.json({tokenJWT: tokenJWT});
       res.json({tokenJWT});
     
