@@ -9,5 +9,6 @@
 	"Token no suministrado": "no token provided",
 	"invalid token": "invalid token",
 	"Listado de Artículos": "General List of Articles",
-	"Inicio": "Home"
+	"Inicio": "Home",
+	"Error en la petición post de /api/anuncios": "Error in the post request in /api/anuncios endpoint"
 }
