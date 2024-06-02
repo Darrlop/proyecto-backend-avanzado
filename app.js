@@ -13,6 +13,9 @@ const LoginController = require('./controllers/LoginController');
 const langController = new LangController();
 const loginController = new LoginController();
 
+// const thumbnailReq = require('./lib/ThumbnailImageRequester');
+// const thumbnailResp = require('./lib/thumbnailImageService');
+
 require('./lib/connectMongoose');
 
 //var indexRouter = require('./routes/index');

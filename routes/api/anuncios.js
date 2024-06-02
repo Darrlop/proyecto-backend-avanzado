@@ -7,7 +7,12 @@ const Anuncio = require("../../models/Anuncio");
 const { query, validationResult } = require("express-validator");
 const validator = require("../../lib/validations"); //modularizadas las validaciones
 const upload = require("../../lib/publicUploadConfigure"); //librería para subidad foto form-data
-const jimp = require('jimp');
+// const jimp = require('jimp');
+// const createThumbnail = require('../../lib/ThumbnailImageRequester')
+const lanzarReq = require('../../lib/thumbnailImageRequester');
+// const thumbnailResp = require('../../lib/thumbnailImageService');
+
+
 
 // GET /api/anuncios?
 // Devuelve un json con lista de anuncio según filtros
@@ -121,24 +126,23 @@ router.post("/", upload.single('foto'), validator.validaBody, async (req, res, n
     const datos = req.body;
     datos.foto = req.file.filename; //Añado el nombre compuesto de la imagen
 
+    
 
-
-
-    /**
-     * Uso de JIMP previo a implementarlo con microservicios
-     */
-    const thumb = req.file.path;
-    //console.log("-----REQ.FILE => " + JSON.stringify(req.file))
-    //const rutaThumb = path.join(__dirname, '..', 'public', 'assets', "img");
-    jimp.read(thumb)
-    .then((thumbnail) => {
-      return thumbnail
-        .resize(256, 256) // resize
-        .write( `${path.join(req.file.destination, req.file.filename)}-thumbnail.png`); // guardo el fichero creado
-    })
-    .catch((err) => {
-      console.error(err);
-    });
+    // /**
+    //  * Uso de JIMP previo a implementarlo con microservicios
+    //  */
+    // const thumb = req.file.path;
+    // //console.log("-----REQ.FILE => " + JSON.stringify(req.file))
+    // //const rutaThumb = path.join(__dirname, '..', 'public', 'assets', "img");
+    // jimp.read(thumb)
+    // .then((thumbnail) => {
+    //   return thumbnail
+    //     .resize(256, 256) // resize
+    //     .write( `${path.join(req.file.destination, req.file.filename)}-thumbnail.png`); // guardo el fichero creado
+    // })
+    // .catch((err) => {
+    //   console.error(err);
+    // });
 
 
 
@@ -146,6 +150,7 @@ router.post("/", upload.single('foto'), validator.validaBody, async (req, res, n
     console.log(datos)
     const anuncio = new Anuncio(datos);
     const anuncioInsertado = await anuncio.save();
+    lanzarReq(req.file.path, req.file.destination, req.file.filename);
     res.json({ result: anuncioInsertado });
   }catch (error) {
     console.log("Error en la petición post de /api/anuncios");
