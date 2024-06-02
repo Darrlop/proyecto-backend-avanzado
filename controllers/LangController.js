@@ -1,4 +1,5 @@
 class LangController {
+
   changeLocale(req, res, next){
     const locale = req.params.locale;
 
@@ -10,6 +11,7 @@ class LangController {
 
     res.redirect('back'); // redirige a la página de la que venimos por medio de la cabecera 'referer'
   }
+
 }
 
 module.exports = LangController;

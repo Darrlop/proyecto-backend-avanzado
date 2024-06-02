@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "cross-env DEBUG=nodepop:* nodemon ./bin/www & node lib/thumbnailImageService.js",
+    "dev": "cross-env DEBUG=nodepop:* nodemon ./bin/www",
     "testBD": "node testBD.js",
     "initDB": "node initDB.js"
   },

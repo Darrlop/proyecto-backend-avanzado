@@ -13,7 +13,6 @@ const anuncioSchema = mongoose.Schema({
   owner: {type: [String], required: true}
 });
 
-
 // Métodos estáticos
 
 anuncioSchema.statics.listar = function(filtro, skip, limit, sort, fields) {

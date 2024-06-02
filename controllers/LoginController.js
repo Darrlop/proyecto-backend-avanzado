@@ -20,11 +20,12 @@ class LoginController {
       const tokenJWT = await jwt.sign({userId: usuario._id},process.env.JWT_SECRET, { expiresIn: '3h'} ); 
       //res.json({tokenJWT: tokenJWT});
       res.json({tokenJWT});
-    
+      
     } catch (error) {
       next(error);
     }
   }
+
 }
 
 module.exports = LoginController;

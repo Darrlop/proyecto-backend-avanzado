@@ -3,14 +3,12 @@
 var express = require("express");
 var router = express.Router();
 const path = require('node:path');
-const Anuncio = require("../../models/Anuncio");
 const { query, validationResult } = require("express-validator");
+const Anuncio = require("../../models/Anuncio");
 const validator = require("../../lib/validations"); //modularizadas las validaciones
 const upload = require("../../lib/publicUploadConfigure"); //librería para subidad foto form-data
 const lanzarReq = require('../../lib/thumbnailImageRequester'); //lanza el requetser del microservicio
 const borrarArchivo = require('../../lib/filesDelete');
-
-
 
 // GET /api/anuncios?
 // Devuelve un json con lista de anuncio según filtros
@@ -46,7 +44,7 @@ router.get("/", validator.validaQuery, async (req, res, next) => {
 
     const userId = req.apiUserId;
     let precioMin = undefined,
-      precioMax = undefined;
+    precioMax = undefined;
     const filterByTag = req.query.tag;
     const filterByVenta = req.query.venta;
     const filterByNombre = req.query.nombre;
@@ -115,7 +113,6 @@ router.get("/:id", async (req, res, next) => {
 
 // POST /api/anuncios (body)
 // Crea un anuncio
-// router.post("/", validator.validaBody, upload.single('foto'), async (req, res, next) => {
 router.post("/", upload.single('foto'), validator.validaBody, async (req, res, next) => {  
   try {
     validationResult(req).throw(); // genero excepción en caso de error en la validación
@@ -141,9 +138,7 @@ router.delete("/:id", async (req, res, next) => {
     const id = req.params.id;
     let resultado = undefined;
 
-    // const {owner, foto} = await Anuncio.findById({_id: id});
-    const datosAnuncio = await Anuncio.findById({_id: id});
-    
+    const datosAnuncio = await Anuncio.findById({_id: id});    
     if (datosAnuncio === null){
       throw new Error("Anuncio inexistente");
     }
@@ -151,30 +146,17 @@ router.delete("/:id", async (req, res, next) => {
   
     
     //const resultado = await Anuncio.deleteOne({ _id: id, owner: userId });
-    
-    // console.log("USER ID ==="+userId)
-    // console.log("USER ID ==="+typeof(userId))
-    // console.log("OWNER ==="+(JSON.stringify(owner)))
-    // console.log("OWNER ==="+typeof(JSON.stringify(owner)))
-
-    // const theOwner = JSON.stringify(owner);
-    // console.log("theOWNER ==="+theOwner)
-    // console.log("==="+typeof(theOwner))
-
-    
     if (userId === owner[0]){
       resultado = await Anuncio.deleteOne({ _id: id });
       const rutaBorrado = path.join(__dirname, '..', '..', 'public', 'assets', "img");
-      // console.log("ruta borrado ==="+rutaBorrado)
       borrarArchivo(rutaBorrado, foto);
-      // console.log(`${foto}-thumbnail.png`)
       borrarArchivo(rutaBorrado, `${foto}-thumbnail.png`);
-
     }else{
       throw new Error("El anuncio no será borrado: El usuario actual no es dueño de este anuncio.");
     }
 
     res.json({ estado: resultado });
+    
   } catch (error) {
     next(error);
   }
