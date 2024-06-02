@@ -126,27 +126,6 @@ router.post("/", upload.single('foto'), validator.validaBody, async (req, res, n
     const datos = req.body;
     datos.foto = req.file.filename; //Añado el nombre compuesto de la imagen
 
-    
-
-    // /**
-    //  * Uso de JIMP previo a implementarlo con microservicios
-    //  */
-    // const thumb = req.file.path;
-    // //console.log("-----REQ.FILE => " + JSON.stringify(req.file))
-    // //const rutaThumb = path.join(__dirname, '..', 'public', 'assets', "img");
-    // jimp.read(thumb)
-    // .then((thumbnail) => {
-    //   return thumbnail
-    //     .resize(256, 256) // resize
-    //     .write( `${path.join(req.file.destination, req.file.filename)}-thumbnail.png`); // guardo el fichero creado
-    // })
-    // .catch((err) => {
-    //   console.error(err);
-    // });
-
-
-
-
     console.log(datos)
     const anuncio = new Anuncio(datos);
     const anuncioInsertado = await anuncio.save();

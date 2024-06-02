@@ -4,12 +4,11 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "cross-env DEBUG=nodepop:* nodemon ./bin/www & node lib/thumbnailImageService.js",
+    "dev": "cross-env DEBUG=nodepop:* nodemon ./bin/www & nodemon ./lib/thumbnailImageService.js",
     "testBD": "node testBD.js",
     "initDB": "node initDB.js"
   },
   "dependencies": {
-    "bcrypt": "^5.1.1",
     "cookie-parser": "~1.4.4",
     "cote": "^1.0.3",
     "cross-env": "7.0.3",

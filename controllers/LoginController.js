@@ -11,14 +11,13 @@ class LoginController {
       let {email, password} = req.headers;
       //console.log (email);
       const usuario = await Usuario.findOne({ email: email});
-      
-      if (!usuario) {
-        //const error = req.__('Usuario/contraseña incorrecto')       
-        res.json({ error: transl.__('Usuario/contraseña incorrecto')});
+
+      if (!usuario || !(await usuario.comparePassword(password))) {      
+        res.json({ error: 'Error en el Usuario y/o contraseña'});
         return;
       }
 
-      const tokenJWT = await jwt.sign({userId: usuario._id},process.env.JWT_SECRET, { expiresIn: '1h'} ); 
+      const tokenJWT = await jwt.sign({userId: usuario._id},process.env.JWT_SECRET, { expiresIn: '3h'} ); 
       //res.json({tokenJWT: tokenJWT});
       res.json({tokenJWT});
     
