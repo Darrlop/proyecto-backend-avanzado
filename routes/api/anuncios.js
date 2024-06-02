@@ -16,8 +16,7 @@ const lanzarReq = require('../../lib/thumbnailImageRequester');
 
 // GET /api/anuncios?
 // Devuelve un json con lista de anuncio según filtros
-router.get("/", validator.validaQuery, async (req, res, next) => {
-  console.log("punto /private");  
+router.get("/", validator.validaQuery, async (req, res, next) => {  
   try {
     validationResult(req).throw(); // genero excepción en caso de error en la validación
 
@@ -141,11 +140,12 @@ router.post("/", upload.single('foto'), validator.validaBody, async (req, res, n
 // Elimina el anuncio indicado por la id
 router.delete("/:id", async (req, res, next) => {
   try {
+    const userId = req.apiUserId;
+    console.log("USUARIO::::::: "+userId)
     const id = req.params.id;
-    const resultado = await Anuncio.deleteOne({ _id: id });
+    const resultado = await Anuncio.deleteOne({ _id: id, owner: userId });
     res.json({ estado: resultado });
   } catch (error) {
-    console.log("Error en la petición delete de /api/anuncios/id:", error);
     next(error);
   }
 });
