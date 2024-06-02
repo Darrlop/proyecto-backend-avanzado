@@ -117,12 +117,30 @@ router.post("/", upload.single('foto'), validator.validaBody, async (req, res, n
   try {
     validationResult(req).throw(); // genero excepción en caso de error en la validación
 
+    
     const datos = req.body;
-    datos.foto = req.file.filename; //Añado el nombre compuesto de la imagen
+    let elFilename;
+    let elPath;
+    let elDestination;
+    
+    if(JSON.stringify(req.file) === undefined) {
+      datos.foto = "noIMage"; 
+      elFilename = `Item-${Date.now()}-noImage.jpg`;
+      elPath = path.join(__dirname, '..', 'public', 'assets', "img");
+      elDestination = path.join(elPath,elFilename);
+      
+    }else{
+      console.log("DENTRO")
+      datos.foto = req.file.filename; //Añado el nombre compuesto de la imagen
+      elFilename = req.file.filename;
+      elPath = req.file.path;
+      elDestination = req.file.destination;
+    }
 
     const anuncio = new Anuncio(datos);
     const anuncioInsertado = await anuncio.save();
-    lanzarReq(req.file.path, req.file.destination, req.file.filename);
+    //lanzarReq(req.file.path, req.file.destination, req.file.filename);
+    lanzarReq(elPath, elDestination, elFilename);
     res.json({ result: anuncioInsertado });
   }catch (error) {
     console.log("Error en la petición post de /api/anuncios");
