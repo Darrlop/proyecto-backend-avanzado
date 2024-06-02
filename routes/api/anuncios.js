@@ -7,10 +7,8 @@ const Anuncio = require("../../models/Anuncio");
 const { query, validationResult } = require("express-validator");
 const validator = require("../../lib/validations"); //modularizadas las validaciones
 const upload = require("../../lib/publicUploadConfigure"); //librería para subidad foto form-data
-// const jimp = require('jimp');
-// const createThumbnail = require('../../lib/ThumbnailImageRequester')
-const lanzarReq = require('../../lib/thumbnailImageRequester');
-// const thumbnailResp = require('../../lib/thumbnailImageService');
+const lanzarReq = require('../../lib/thumbnailImageRequester'); //lanza el requetser del microservicio
+const borrarArchivo = require('../../lib/filesDelete');
 
 
 
@@ -125,7 +123,6 @@ router.post("/", upload.single('foto'), validator.validaBody, async (req, res, n
     const datos = req.body;
     datos.foto = req.file.filename; //Añado el nombre compuesto de la imagen
 
-    console.log(datos)
     const anuncio = new Anuncio(datos);
     const anuncioInsertado = await anuncio.save();
     lanzarReq(req.file.path, req.file.destination, req.file.filename);
@@ -141,9 +138,42 @@ router.post("/", upload.single('foto'), validator.validaBody, async (req, res, n
 router.delete("/:id", async (req, res, next) => {
   try {
     const userId = req.apiUserId;
-    console.log("USUARIO::::::: "+userId)
     const id = req.params.id;
-    const resultado = await Anuncio.deleteOne({ _id: id, owner: userId });
+    let resultado = undefined;
+
+    // const {owner, foto} = await Anuncio.findById({_id: id});
+    const datosAnuncio = await Anuncio.findById({_id: id});
+    
+    if (datosAnuncio === null){
+      throw new Error("Anuncio inexistente");
+    }
+    const {owner, foto} = datosAnuncio;
+  
+    
+    //const resultado = await Anuncio.deleteOne({ _id: id, owner: userId });
+    
+    // console.log("USER ID ==="+userId)
+    // console.log("USER ID ==="+typeof(userId))
+    // console.log("OWNER ==="+(JSON.stringify(owner)))
+    // console.log("OWNER ==="+typeof(JSON.stringify(owner)))
+
+    // const theOwner = JSON.stringify(owner);
+    // console.log("theOWNER ==="+theOwner)
+    // console.log("==="+typeof(theOwner))
+
+    
+    if (userId === owner[0]){
+      resultado = await Anuncio.deleteOne({ _id: id });
+      const rutaBorrado = path.join(__dirname, '..', '..', 'public', 'assets', "img");
+      // console.log("ruta borrado ==="+rutaBorrado)
+      borrarArchivo(rutaBorrado, foto);
+      // console.log(`${foto}-thumbnail.png`)
+      borrarArchivo(rutaBorrado, `${foto}-thumbnail.png`);
+
+    }else{
+      throw new Error("El anuncio no será borrado: El usuario actual no es dueño de este anuncio.");
+    }
+
     res.json({ estado: resultado });
   } catch (error) {
     next(error);
